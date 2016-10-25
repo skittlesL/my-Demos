@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="mTween.js"></script>
+		<style>
+			#box{
+				width: 1100px;
+				margin: 0 auto;
+				height: 480px;
+				background: #eee;
+				position: relative;
+			}
+			#box div{
+				width: 80px;
+				height: 80px;
+				border-radius: 100%;
+				margin-left: 10px;
+				background: lightskyblue;
+				position: absolute;
+				top: 0;
+			}
+		</style>
+		<script>
+			window.onload = function(){
+				var divs = document.querySelectorAll('#box div');
+				var n = 0;
+				for(var i=0;i<divs.length;i++){
+					divs[i].style.left = 100*i+'px';
+				}
+				for(var i=0;i<divs.length;i++){
+					divs[i].onclick = function(){
+						rightMove(this);
+						leftMove(this);
+					}
+				}
+				
+				
+				function rightMove(div){
+						mTween(div,{top:400},1000,'backBoth',function(){
+							mTween(div,{top:0},1000,'backBoth');
+						});
+					setTimeout(function(){
+						if(div.nextElementSibling){
+							rightMove(div.nextElementSibling);
+						};
+					},160);
+					
+				}
+				
+				function leftMove(div){
+						mTween(div,{top:400},1000,'backBoth',function(){
+							mTween(div,{top:0},1000,'backBoth');
+						});
+					setTimeout(function(){
+						if(div.previousElementSibling){
+							leftMove(div.previousElementSibling);
+						}; 
+					},160);
+					
+				}
+			}
+		</script>
+	</head>
+	<body>
+		<div id="box">
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+	</body>
+</html>
