@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+		body{
+			position: relative;
+		}
+			#box{
+				width: 100px;
+				height: 100px;
+				background: cadetblue;
+				position: absolute;
+				top: 0;
+				left: 0;
+				cursor: pointer;
+			}
+		</style>
+		<script>
+			window.onload = function(){
+				/*var box = document.getElementById("box");
+				var disX = 0;
+				var disY = 0;
+				
+				box.addEventListener("mousedown",fnDown);
+				function fnDown(ev){
+					disX = ev.pageX - box.offsetLeft;
+					disY = ev.pageY - box.offsetTop;
+					document.addEventListener("mousemove",fnMove);
+					document.addEventListener("mouseup",fnUp);
+				}
+				function fnMove(ev){
+					box.style.left = ev.pageX - disX + "px";
+					box.style.top = ev.pageY - disY + "px";
+				}
+				function fnUp(){
+					document.removeEventListener("mousemove",fnMove);
+					document.removeEventListener("mouseup",fnUp);
+				}*/
+				function Init(){
+					this.box = document.getElementById("box");
+					this.disX = 0;
+					this.disY = 0;
+				}
+				Init.prototype.init = function(){
+					var _this = this;
+					this.box.addEventListener("mousedown",function(ev){
+						_this.fnDown(ev);
+					});
+				}
+				Init.prototype.fnDown = function(ev){
+					var _this = this;
+					this.disX = ev.pageX - this.box.offsetLeft;
+					this.disY = ev.pageY - this.box.offsetTop;
+					document.addEventListener("mousemove",move);
+					document.addEventListener("mouseup",up);
+					function move(ev){
+						_this.fnMove(ev);
+					}
+					function up(){
+						_this.fnUp(move,up);
+					}
+					ev.preventDefault();
+				}
+				Init.prototype.fnMove = function(ev){
+					this.box.style.left = ev.pageX - this.disX + "px";
+					this.box.style.top = ev.pageY - this.disY + "px";
+				}
+				Init.prototype.fnUp = function(move,up){
+					document.removeEventListener("mousemove",move);
+					document.removeEventListener("mouseup",up);
+				}
+				
+				var init1 = new Init();
+				init1.init();
+			}
+		</script>
+	</head>
+	<body>
+		<div id="box">
+			
+		</div>
+	</body>
+</html>
