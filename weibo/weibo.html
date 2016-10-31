@@ -1,0 +1,255 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+<link href="style/weibo.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div class="znsArea">
+<!--留言-->
+     <div class="takeComment">
+        <textarea name="textarea" class="takeTextField" id="tijiaoText"></textarea>
+        <div class="takeSbmComment">
+            <input type="button" id="btn1" class="inputs" value="" />
+            <span>(可按 Enter 回复)</span>
+        </div>
+    </div>
+<!--已留-->
+    <div class="commentOn">
+        <div class="messList" id="div1" style="height:502px">
+        	<!--<div class="reply">
+                <p class="replyContent">卫士，新款卫士将推出总共14种车身式样。其中， XS旅行款车型售价为32295英镑(约33.6万元)。</p>
+                <p class="operation">
+                    <span class="replyTime">2011-09-08 16:37:60</span>
+                    <span class="handle">
+                    	<a href="javascript:;" class="top">0</a>
+                        <a href="javascript:;" class="down_icon">0</a>
+                        <a href="javascript:;" class="cut">删除</a>
+                    </span>
+                </p>
+            </div>-->
+        </div>
+        <div class="page">
+        	<!--<a href="javascript:;" class="active">1</a>
+        	<a href="javascript:;">2</a>
+        	<a href="javascript:;">3</a>-->
+        </div>
+    </div>
+</div>
+</body>
+<script src="jquery-1.11.1.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	$(function(){
+		var $btn = $("#btn1"),
+		$content = $("#tijiaoText"),
+		$div1 = $("#div1"),
+		pageNum = 1;
+		
+		//点击按钮将输入的内容提交
+		//weibo.php?act=add&content=xxx
+		$btn.on("click",function(){
+			var val = $content.val();
+			$.ajax({
+				url:"weibo.php",
+				dataType:"json",
+				data:{
+					act:"add",
+					content:val
+				},
+				success:function(json){
+					if(!json.error){
+						submitData();
+						$content.val('');
+						//console.log(str);
+					}
+				}
+			});
+		})
+		//按ctrl和enter键提交
+		$content.on('keydown',function(ev){
+			if(ev.which == 13 && ev.ctrlKey){
+				$btn.trigger('click');
+			}
+		})
+		//页面刷新时就请求数据
+		//weibo.php?act=get&page=2
+		submitData();
+		function submitData(){
+			$.ajax({
+				url:"weibo.php",
+				data:{
+					act:"get",
+					page:pageNum
+				},
+				success:function(data){
+					var arr = (new Function('','return'+data))();
+					console.log(arr);
+					$div1.html('');
+					
+					$.each(arr, function(index,elem){
+						var newDiv = creatDiv(elem.content,elem.time,elem.id,elem.acc,elem.ref);
+						$div1.append(newDiv);
+						pageCount();
+					});
+				}
+			});
+		}
+		
+		//时间时分秒不到二位数十位数应该是0
+		function zero(n){
+			return n < 10?"0"+n:""+n;
+		}
+		
+		function creatDiv(val,time,id,acc,ref){
+			var newDiv = $('<div class="reply" data-id = "'+id+'"></div>');
+						
+			//获取服务器的时间
+			var oDate = new Date(time*1000),
+			iYear = oDate.getFullYear(),
+			iMonth = oDate.getMonth()+1,
+			iDay = oDate.getDate(),
+			iHour = oDate.getHours(),
+			iMin = oDate.getMinutes(),
+			iSec = oDate.getSeconds();
+			
+			var str = iYear+'-'+zero(iMonth)+'-'+zero(iDay)+' '+zero(iHour)+':'+zero(iMin)+':'+zero(iSec);
+			
+			newDiv.html(
+				`<p class="replyContent">${val}</p>
+                <p class="operation">
+                    <span class="replyTime">${str}</span>
+                    <span class="handle">
+                    	<a href="javascript:;" class="top">${acc}</a>
+                        <a href="javascript:;" class="down_icon">${ref}</a>
+                        <a href="javascript:;" class="cut">删除</a>
+                    </span>
+                </p>`
+			)
+			/*
+				顶一条 
+				weibo.php?act=acc&id=num
+			*/
+			var $top = newDiv.find('.top');
+			zanCai($top,'acc');
+			/*
+				踩一条 
+				weibo.php?act=ref&id=num
+			*/
+			var $down = newDiv.find('.down_icon');
+			zanCai($down,'ref');
+			/*
+			 * 删除
+			 * weibo.php?act=del&id=num
+			 */
+			var $del = newDiv.find('.cut');
+			$del.on('click',function(){
+				var id = $(this).closest(".reply")[0].dataset.id;
+				var _this = $(this);
+				$.ajax({
+					url:"weibo.php",
+					data:{
+						act:"del",
+						id:id
+					},
+					success:function(json){
+						var obj = (new Function('','return'+json))();
+						if(!obj.error){
+							_this.closest('.reply').remove();
+							pageCount();
+						}
+					}
+				});
+			});
+			return newDiv;
+		}
+		function zanCai(top,ref){
+			top.on("click",function(){
+				var id = $(this).closest(".reply")[0].dataset.id;
+				var _this = $(this);
+				$.ajax({
+					url:"weibo.php",
+					data:{
+						act:ref,
+						id:id
+					},
+					success:function(json){
+						var obj = (new Function('','return'+json))();
+						if(!obj.error){
+							var num = _this.text();
+							num++;
+							_this.text(num);
+						}
+					}
+				})
+				
+			})
+		}
+		/*
+		 * 获取页数
+		 * weibo.php?act=get_page_count
+		 */
+		function pageCount(){
+			console.log(1);
+			$.ajax({
+				url:"weibo.php",
+				data:{
+					act:'get_page_count'
+				},
+				success:function(json){
+					var obj = (new Function('','return'+json))();
+					//console.log(obj);
+					var $page = $(".page");
+					var str = '';
+					//console.log(obj.count);
+					for(var i=0;i<obj.count;i++){
+						str+=`<a href="javascript:;" data-id=${i+1}>${i+1}</a>`;
+					}
+					$page.html(str);
+					$page.find("a").eq(pageNum-1).addClass("active");
+					//给每个页数添加点击事件
+					$page.find("a").on('click',function(){
+						$(this).addClass("active").siblings().removeClass("active");
+						pageNum = $(this)[0].dataset.id;
+						submitData();
+					})
+				}
+			})
+		}
+	})
+</script>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
