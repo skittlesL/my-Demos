@@ -1,0 +1,209 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+<script src="myWheel_1.0.js"></script>
+<style>
+html,body *{
+	margin: 0px;
+	padding: 0px;
+	overflow-y:hidden;
+}
+#div1{
+	width:600px;
+	height: 400px;
+	position: relative;
+	border: 1px solid cadetblue;
+	margin: 50px auto;
+}
+#div2{
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	top:0;
+	overflow: hidden; 
+}
+#p1{
+	text-indent: 2em;
+	padding: 10px 40px 15px 15px;
+	line-height: 28px;
+	text-align: justify;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+#div3{
+	width:30px;
+	height: 100%;
+	border: 1px solid cadetblue;
+	float: right;
+	position: relative;
+}
+#div4{
+	width: 30px;
+	/*height:30px;*/
+	background: cadetblue;
+	position: absolute;
+	top:0;
+}
+</style>
+<script>
+	window.onload = function(){
+		var box1 = document.getElementById("div1");
+		var box2 = document.getElementById("div2");
+		var box3 = document.getElementById("div3");
+		var box4 = document.getElementById("div4");
+		var p = document.getElementById("p1");
+		var disY = 0;
+		//滚动条的高度（box4）
+		var scale1 = box2.offsetHeight/p.scrollHeight;
+		var box4H = scale1*box3.offsetHeight;
+		box4.style.height = box4H+"px";
+		if(scale1>=1){
+			box3.style.display = "none";
+		}else{
+			box3.style.display = "block";
+		}
+		
+		box4.addEventListener("mousedown",fnDown);
+		
+		function fnDown(ev){
+			disY = ev.pageY-box4.offsetTop;
+			
+			document.addEventListener("mousemove",fnMove);
+			document.addEventListener("mouseup",fnUp);
+			
+			ev.preventDefault();
+		}
+		function fnMove(ev){
+			var T = ev.pageY-disY;
+			scrollMove(T);
+		}
+		function fnUp(){
+			document.removeEventListener("mousemove",fnMove);
+			document.removeEventListener("mouseup",fnUp);
+		}
+		//滚轮函数
+		myWheel(box1,function(down){
+			var t = box4.offsetTop;
+			if(down){
+				t-=10;
+			}else{
+				t+=10;
+			}
+			scrollMove(t);
+		})
+		//滚轮点击事件
+		box3.addEventListener("mousedown",fnDown3);
+		var timer = null;
+		function fnDown3(ev){
+			var t = box4.offsetTop;
+			timer = setInterval(function(){
+				if(ev.pageY<box4.getBoundingClientRect().top){
+					t -= 4;
+				}else if(ev.pageY>box4.getBoundingClientRect().bottom){
+					t += 4;
+				}else{
+					clearInterval(timer);
+				}
+				scrollMove(t);
+			},16)
+			
+			ev.preventDefault();
+		}
+		//将滚轮事件和拖拽事件的共同函数封装
+		function scrollMove(T){
+			if(T<0){
+				T = 0;
+			}
+			if(T>box3.offsetHeight-box4H){
+				T = box3.offsetHeight-box4H;
+			}
+			box4.style.top = T +"px";
+			
+			var scale = T/(box3.offsetHeight-box4H);
+			p.style.top = scale*(box2.offsetHeight-p.scrollHeight)+"px";
+		}
+	}
+</script>
+
+</head>
+
+<body>
+<div id="div1">
+	<div id="div2">
+		<p id="p1">
+			去年冬天的一个清晨，荷西和我坐在马德里的公园里。那天的气候非常寒冷，我将自己由眼睛以下都盖在大衣下面，只伸出一只手来丢面包屑喂麻雀。荷西穿了一件旧的厚夹克，正在看一本航海的书。<br />
+
+　　"三毛，你明年有什么大计划？"他问我。<br />
+
+　　"没什么特别的，过完复活节以后想去非洲。""摩洛哥吗？你不是去过了？"他又问我。<br />
+
+　　"去过的是阿尔及利亚，明年想去的是撒哈拉沙漠。"<br />
+
+　　荷西有一个很大的优点，任何三毛所做的事情，在别人看来也许是疯狂的行为，在他看来却是理所当然的。所以跟他在一起也是很愉快的事。
+
+　　"你呢？"我问他。<br />
+
+　　"我夏天要去航海，好不容易念书，服兵役，都告一个段落了。"他将手举起来放在颈子后面。<br />
+
+　　"船呢？"我知道他要一条小船已经好久了。<br />
+
+　　"黑稣父亲有条帆船借我们，明年去希腊爱琴海，潜水去。"<br />
+
+　　我相信荷西，他过去说出来的事总是做到的。<br />
+
+　　"你去撒哈拉预备住多久？去做什么？"<br />
+
+　　"总得住个半年一年吧！我要认识沙漠。"这个心愿是我自小念地理以后就有的了。<br />
+
+　　"我们六个人去航海，将你也算进去了，八月赶得回来吗？"<br />
+
+　　我将大衣从鼻子上拉下来，很兴奋的看着他。"我不懂船上的事，你派我什么工作？"口气非常高兴。<br />
+
+　　"你做厨子兼摄影师，另外我的钱给你管，干不干？""当然是想参加的，只怕八月还在沙漠里回不来，怎么才好？我两件事都想做。"真想又捉鱼又吃熊掌。荷西有点不高兴，大声叫："认识那么久了，你总是东奔西跑，好不容易我服完兵役了，你又要单独走，什么时候才可以跟你在一起？"<br />
+
+　　荷西一向很少抱怨我的，我奇怪的看了他一眼，一面将面包屑用力撒到远处去，被他一大声说话，麻雀都吓飞了。"你真的坚持要去沙漠？"他又问我一次。<br />
+
+　　我重重的点了一下头，我很清楚自己要做的事。"好。"他负气的说了这个字，就又去看书了。荷西平时话很多，烦人得很，但真有事情他就决不讲话。想不到今年二月初，荷西不声不响申请到一个工作，（就正对着撒哈拉沙漠去找事。）他卷卷行李，却比我先到非洲去了。<br />
+
+　　我写信告诉他："你实在不必为了我去沙漠里受苦，况且我就是去了，大半时间也会在各处旅行，无法常常见到你——。"<br />
+
+　　荷西回信给我："我想得很清楚，要留住你在我身边，只有跟你结婚，要不然我的心永远不能减去这份痛楚的感觉。我们夏天结婚好么？"信虽然很平实，但是我却看了快十遍，然后将信塞在长裤口袋里，到街上去散步了一个晚上，回来就决定了。<br />
+
+　　今年四月中旬，我收拾了自己的东西，退掉马德里的房子，也到西属撒哈拉沙漠里来了。当晚荷西住在他工作的公司的宿舍里，我住在小镇阿雍，两地相隔来回也快一百里路，但是荷西天天来看我。<br />
+
+　　"好，现在可以结婚了。"他很高兴，容光焕发。"现在不行，给我三个月的时间，我各处去看看，等我回来了我们再结婚。"我当时正在找机会由沙哈拉威（意思就是沙漠里的居民）带我一路经过大漠到西非去。<br />
+
+　　"这个我答应你，但总得去法院问问手续，你又加上要入籍的问题。"我们讲好婚后我两个国籍。<br />
+
+　　于是我们一同去当地法院问问怎么结婚。秘书是一位头发全白了的西班牙先生，他说："要结婚吗？唉，我们还没办过，你们晓得此地沙哈拉威结婚是他们自己风俗。我来翻翻法律书看——"他一面看书又一面说："公证结婚，啊，在这里——这个啊，要出生证明，单身证明，居留证明，法院公告证明……这位小姐的文件要由台湾出，再由中国驻葡公使馆翻译证明，证明完了再转西班牙驻葡领事馆公证，再经西班牙外交部，再转来此地审核，审核完毕我们就公告十五天，然后再送马德里你们过去户籍所在地法院公告……。"我生平最不喜欢填表格办手续，听秘书先生那么一念，先就烦起来了，轻轻的对荷西说："你看，手续太多了，那么烦，我们还要结婚吗？" <br />
+
+　　"要。你现在不要说话嘛！"他很紧张，接着他问秘书先生："请问大概多久我们可以结婚？"<br />
+
+　　"咦，要问你们自己啊！文件齐了就可公告，两个地方公告就得一个月，另外文件寄来寄去嘛——我看三个月可以了。"秘书慢吞吞的将书合起来。<br />  
+	</div>
+	<div id="div3">
+		<div id="div4"></div>
+	</div>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
