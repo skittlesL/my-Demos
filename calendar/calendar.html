@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>win10日历</title>
+	<style>
+		/* reset */
+		body, dl, dd, ul, ol, h1, h2, h3, h4, h5, h6, form, input, th, td, p { margin: 0; padding: 0;}
+		table {border-collapse:collapse;}
+		img { border: none; vertical-align: top;}
+		li { list-style: none;}
+		a { text-decoration: none;}
+		em{ font-style: normal;}
+		strong{ font-weight: normal;}
+		textarea{ resize: none; overflow: auto;}
+		input,textarea,select,lable{ outline: none; border: none;}
+		.clear{ zoom:1;}
+		.clear:after{ content: ""; display: block; clear: both;}
+		
+		html, body { height: 100%; width: 100%;}
+		body { background: #fff url(bg.jpg) 0 0 no-repeat; background-size: 100% 100%;}
+		#date { width: 360px; background-color: rgba(65,105,225,0.5); position: absolute; bottom: 10px; right: 100px;}
+		header { height: 110px;}
+		header p { padding-top: 30px; font-size: 36px; text-indent: 20px; line-height: 36px; color: #fff; }
+		header a { display: block; height: 44px; line-height: 44px; font-size: 16px; text-indent: 20px; color: #73c1c0; }
+		nav { overflow: hidden; height: 50px; }
+		nav a { display: block; height: 50px; line-height: 50px; color: #e0ffff; }
+		nav a:nth-of-type(1) { display: block; text-indent: 20px; font-size: 20px; float: left; width: 260px;}
+		nav a:nth-of-type(n+2) { text-align: left; width: 20px; font-size: 20px; margin:0 20px 0 0; }
+		nav a:nth-of-type(2) { float: left; margin-left: 0px;}
+		nav a:nth-of-type(3) { float: left; margin-left: 6px;}
+		section { overflow: hidden; height: 280px; position: relative; }
+		section>div { overflow: hidden; margin: 0 19px; position: absolute; left: 0; top: 0; }
+		section .wrapDate { z-index: 2; }
+		section .wrapDate ul { overflow: hidden;}
+		section .wrapDate li { float: left; width: 46px; text-align: center; font-size: 14px; color:#fff; line-height: 40px; cursor: pointer;}
+		section .wrapDate div { overflow: hidden;}
+		section .wrapDate span { display: block; float: left; width: 42px; height: 36px; line-height: 36px; text-align: center; color: #fff; border: 2px solid rgba(0,0,0,0); cursor: pointer;}
+		section span.today { background-color: #1e90ff; border: 2px solid #fff;}
+		section span.dateNow { border: 2px solid #fff;}
+		section span.notThisMonth { color: rgba(200,200,200,0.6);}
+		section .wrapDate span:hover { border: 2px solid rgba(255,255,255,0.3);}
+		section .wrapMonth { display: none; z-index: 3;}
+		section .wrapMonth span { display: block; width: 76px; height: 66px; border: 2px solid rgba(0,0,0,0); float: left; line-height: 66px; font-size: 26px; color: #fff; text-align: center;}
+		section .wrapMonth span.thisMonth { background-color: #1e90ff; font-weight: bold;}
+		section .wrapMonth span.thisYearMonth { color: rgba(255,255,255,0.6); }
+		section .wrapMonth span:hover { border: 2px solid rgba(255,255,255,0.3);}
+		section .wrapYear { display: none; z-index: 4;}
+		section .wrapYear span { display: block; width: 76px; height: 66px; border: 2px solid rgba(0,0,0,0); float: left; line-height: 66px; font-size: 26px; color: rgba(255,255,255,0.6); text-align: center;}
+		section .wrapYear span.thisYear { background-color: #1e90ff; font-weight: bold;}
+		section .wrapYear span.nextAge { color: rgba(255,255,255,1); }
+		section .wrapYear span:hover { border: 2px solid rgba(255,255,255,0.3);}
+		span { cursor: pointer;}
+		footer { height: 60px;}
+		footer p { line-height: 60px; font-size: 16px; color:#73c1c0; text-indent: 20px; cursor: pointer;}
+	</style>
+	<script>
+		window.onload = function() {
+			var wrap = document.querySelector("#date");
+			var clock = document.querySelector("header p");
+			var dateToday = document.querySelector("header a");
+			var navInform = document.querySelector("nav a:nth-of-type(1)");
+			var prev = document.querySelector("nav a:nth-of-type(2)");
+			var next = document.querySelector("nav a:nth-of-type(3)");
+			var section = document.querySelector("section");
+			var wrapDate = document.querySelector("section .wrapDate");
+			var wrapMonth = document.querySelector("section .wrapMonth");
+			var wrapYear = document.querySelector("section .wrapYear");
+			
+			var dateWrap = document.querySelector("section .wrapDate div");
+			var onOff = "date";
+			var timer = null;
+			// 储存当前时间 不可修改
+			var today = new Date();
+			// 这里用来设置头部信息，这里使用的时间对象总是为当前时间对象
+			headerSet ();
+			timer = setInterval(headerSet, 1000)
+			function headerSet () {
+				var d = new Date();
+				var strP = format(d.getHours()) + ":" +  format(d.getMinutes()) + ":" + format(d.getSeconds());
+				clock.innerHTML = strP;
+				var strD = d.getFullYear() + "年" + (d.getMonth()+1) + "月" + d.getDate() + "日,星期" + ["日","一","二","三","四","五","六"][d.getDay()];
+				dateToday.innerHTML = strD;
+				
+			}
+			function format (v) {
+				return v<10?"0"+v:""+v;
+			}
+			// 储存日历时间 可变
+			var date = new Date();
+			dateWrapForm(date);
+			prev.onclick = function() {
+				if (onOff == "date") {
+					date.setMonth( date.getMonth()-1, 1);
+					dateWrapForm(date);
+					
+				} else if (onOff == "month") {
+					date.setFullYear(date.getFullYear()-1);
+					monthWrapForm(date);
+				} else {
+					date.setFullYear(date.getFullYear()-10);
+					yearWrapForm(date);
+				}
+				
+			};
+			next.onclick = function() {
+				if (onOff == "date") {
+					date.setMonth( date.getMonth()+1, 1);
+					dateWrapForm(date);
+				} else if (onOff == "month") {
+					date.setFullYear(date.getFullYear()+1);
+					monthWrapForm(date);
+				} else{
+					date.setFullYear(date.getFullYear()+10);
+					yearWrapForm(date);
+				}
+				
+			};
+			
+			navInform.onclick = function() {
+				if (onOff == "date") {
+					onOff = "month";
+					wrapDate.style.display = "none";
+					wrapMonth.style.display = "block";
+					monthWrapForm(date);
+				} else {
+					wrapMonth.style.display = "none";
+					wrapYear.style.display = "block";
+					
+					onOff = "year";
+					yearWrapForm(date);
+				}
+			};
+			function yearWrapForm (date) {
+				var str = "";
+				for (var i = 0; i < 16; i++) {
+					str += "<span></span>";
+				};
+				wrapYear.innerHTML = str;
+				var y = date.getFullYear();
+				var y1 = Math.ceil(y/10)*10;
+				str = y1 +"~" + ( y1+10 );
+				navInform.innerHTML = str;
+				var spans = wrapYear.querySelectorAll("span");
+				var arrNum = [];
+				var arrClass = [];
+				for (var i = y; i < y+16; i++) {
+					arrNum.push(i);
+					if ( i>=y1 && i < y1+10 ) {
+						arrClass.push("nextAge");
+					}else {
+						arrClass.push("");
+					}
+				};
+				console.log(arrNum,arrClass);
+				if ( today.getFullYear() == date.getFullYear()) {
+					arrClass[0]="thisYear";
+				};
+				for (var i = 0; i < spans.length; i++) {
+					spans[i].innerHTML = arrNum[i];
+					spans[i].className = arrClass[i];
+				};
+				for (var i = 0; i < spans.length; i++) {
+					spans[i].index = i;
+					spans[i].onclick = function() {
+						wrapYear.style.display = "none";
+						wrapMonth.style.display = "block";
+						date.setFullYear( parseInt(spans[this.index].innerHTML),0,1);
+						monthWrapForm(date);
+						onOff = "month";
+					};
+				};
+			}
+			function monthWrapForm (date) {
+				var str = "";
+				for (var i = 0; i < 16; i++) {
+					str += "<span></span>";
+				};
+				wrapMonth.innerHTML = str;
+				str = date.getFullYear();
+				navInform.innerHTML = str;
+				var spans = wrapMonth.querySelectorAll("span");
+				var arrNum = [];
+				var arrClass = [];
+				for (var i = date.getMonth() +1 ; i <= 12; i++) {
+					arrNum.push(i+"月");
+					arrClass.push("thisYearMonth");
+				};
+				for (var i = 1; i <= 4 + date.getMonth(); i++) {
+					arrNum.push(i+"月");
+					arrClass.push("");
+				};
+				if ( today.getFullYear() == date.getFullYear() && today.getMonth() == date.getMonth() ) {
+					arrClass[0]="thisMonth";
+				};
+				for (var i = 0; i < spans.length; i++) {
+					spans[i].innerHTML = arrNum[i];
+					spans[i].className = arrClass[i];
+				};
+				for (var i = 0; i < spans.length; i++) {
+					spans[i].index = i;
+					spans[i].onclick = function() {
+						wrapDate.style.display = "block";
+						wrapMonth.style.display = "none";
+						date.setMonth( parseInt(spans[this.index].innerHTML)-1,1);
+						dateWrapForm(date);
+						onOff = "date";
+					};
+				};
+			}
+			function dateWrapForm (date) {
+				var str = "";
+				for (var i = 0; i < 42; i++) {
+					str += "<span></span>";
+				};
+				dateWrap.innerHTML = str;
+				str = date.getFullYear() + "年" + (date.getMonth()+1) + "月";
+				navInform.innerHTML = str;
+				var spans = dateWrap.querySelectorAll("span");
+				var arrNum = [];
+				var arrClass = [];
+				var dateLastMonth = new Date(date.getFullYear(),date.getMonth(),0).getDate();
+				var dayLastMonth = new Date(date.getFullYear(),date.getMonth(),0).getDay();
+				var dateThisMonth = new Date(date.getFullYear(),date.getMonth()+1,0).getDate();
+				for (var i = dateLastMonth - dayLastMonth;i <= dateLastMonth; i++){
+					arrNum.push(i);
+					arrClass.push("notThisMonth");
+				};
+				for (var i = 1; i <= dateThisMonth; i++) {
+					arrNum.push(i);
+					arrClass.push("");
+				};
+				for (var i = 1; i < 42 - dayLastMonth - dateThisMonth; i++) {
+				 	arrNum.push(i);
+					arrClass.push("notThisMonth");
+				};
+				arrClass[dayLastMonth + date.getDate()] = "dateNow";
+				if ( today.getFullYear() == date.getFullYear() && today.getMonth() == date.getMonth() && today.getDate() == date.getDate())  {
+					arrClass[dayLastMonth + date.getDate()] = "today";
+				};
+				
+				for (var i = 0; i < spans.length; i++) {
+					spans[i].innerHTML = arrNum[i];
+					spans[i].className = arrClass[i];
+				};
+			}
+			
+		};
+	</script>
+</head>
+<body>
+	<div id="date">
+		<header>
+			<p></p>
+			<a href="javascript:;"></a>
+		</header>
+		<nav>
+			<a href="javascript:;"></a>
+			<a href="javascript:;">▲</a>
+			<a href="javascript:;">▼</a>
+		</nav>
+		<section>
+			<div class="wrapDate">
+				<ul>
+					<li>日</li>
+					<li>一</li>
+					<li>二</li>
+					<li>三</li>
+					<li>四</li>
+					<li>五</li>
+					<li>六</li>
+				</ul>
+				<div>
+				</div>
+			</div>
+			<div class="wrapMonth">
+			</div>
+			<div class="wrapYear">
+			</div>
+			
+		</section>
+		<footer>
+			<p>日期和时间设置</p>
+		</footer>
+	</div>
+</body>
+</html>
