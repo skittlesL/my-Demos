@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>SVG脑图</title>
+		<style type="text/css">
+			#canvas {
+	        	width: 1000px;
+	        	height: 600px; 
+	        	margin: 0 auto;
+	            box-shadow: 2px 2px 10px rgba(0,0,0,.4);
+	            border-radius: 5px;
+	        }
+	        rect, text { cursor: pointer;}
+		</style>
+	</head>
+	<body>
+	<div id="canvas">
+		<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+			<g id="level1" transform="translate(400 300)" data-offx="400" data-offy="300">
+				<!--左下-->
+				<g id="level2" transform="translate(-250 100)" data-offx="-250" data-offy="100">
+					<path 
+					d="M250 -100 Q250 0 50 0" 
+					stroke-width="1" 
+					stroke="#73a1bf" 
+					fill="none"></path>
+					<rect 
+						x="0" y="0" rx="10" ry="10"
+						width="100" 
+						height="40"
+						fill="#7cc4ff" 
+						stroke="rgb(57,80,96)" 
+						stroke-width="0" 
+						transform="translate(-50 -20)"/>
+					<text 
+						x="0" y="0" fill="#fff" 
+						text-anchor="middle" 
+						dominant-baseline="middle"
+						style="font-size: 16px;"
+						>第一级分支</text>
+				</g>
+				<!--左中-->
+				<g id="level2" transform="translate(-250 0)" data-offx="-250" data-offy="0">
+					<path 
+					d="M250 0 Q250 0 50 0" 
+					stroke-width="1" 
+					stroke="#73a1bf" 
+					fill="none"></path>
+					<rect 
+						x="0" y="0" rx="10" ry="10"
+						width="100" 
+						height="40"
+						fill="#7cc4ff" 
+						stroke="rgb(57,80,96)" 
+						stroke-width="0" 
+						transform="translate(-50 -20)"/>
+					<text 
+						x="0" y="0" fill="#fff" 
+						text-anchor="middle" 
+						dominant-baseline="middle"
+						style="font-size: 16px;"
+						>第一级分支</text>
+				</g>
+				<!--左上-->
+				<g id="level2" transform="translate(-250 -100)" data-offx="-250" data-offy="-100">
+					<path 
+					d="M250 100 Q250 0 50 0" 
+					stroke-width="1" 
+					stroke="#73a1bf" 
+					fill="none"></path>
+					<rect 
+						x="0" y="0" rx="10" ry="10"
+						width="100" 
+						height="40"
+						fill="#7cc4ff" 
+						stroke="rgb(57,80,96)" 
+						stroke-width="0" 
+						transform="translate(-50 -20)"/>
+					<text 
+						x="0" y="0" fill="#fff" 
+						text-anchor="middle" 
+						dominant-baseline="middle"
+						style="font-size: 16px;"
+						>第一级分支</text>
+				</g>
+				<!--右上-->
+				<g id="level2" transform="translate(200 -100)" data-offx="200" data-offy="-100">
+					<path 
+					d="M-200 100 Q-200 0 -50 0" 
+					stroke-width="1" 
+					stroke="#73a1bf" 
+					fill="none"></path>
+					<!--三级右上-->
+					<g id="level3" transform="translate(150 -50)" data-offx="150" data-offy="-50">
+						<path 
+						d="M-100 50 Q-100 0 -40 0" 
+						stroke-width="1" 
+						stroke="#73a1bf" 
+						fill="none"></path>
+						<rect 
+							x="0" y="0" rx="10" ry="10"
+							width="80" 	
+							height="30"
+							fill="rgb(238,243,246)" 
+							stroke="#56b2fd" 
+							stroke-width="1" 
+							transform="translate(-40 -15)"/>
+						<text 
+							x="0" y="0" fill="#56b2fd" 
+							text-anchor="middle" 
+							dominant-baseline="middle"
+							style="font-size: 14px;"
+							>第二级分支</text>
+					</g>
+					<!--三级右下-->
+					<g id="level3" transform="translate(150 50)" data-offx="150" data-offy="50">
+						<path 
+						d="M-100 -50 Q-100 0 -40 0" 
+						stroke-width="1" 
+						stroke="#73a1bf" 
+						fill="none"></path>
+						<rect 
+							x="0" y="0" rx="10" ry="10"
+							width="80" 	
+							height="30"
+							fill="rgb(238,243,246)" 
+							stroke="#56b2fd" 
+							stroke-width="1" 
+							transform="translate(-40 -15)"/>
+						<text 
+							x="0" y="0" fill="#56b2fd" 
+							text-anchor="middle" 
+							dominant-baseline="middle"
+							style="font-size: 14px;"
+							>第二级分支</text>
+					</g>
+					<rect 
+						x="0" y="0" rx="10" ry="10"
+						width="100" 
+						height="40"
+						fill="#7cc4ff" 
+						stroke="rgb(57,80,96)" 
+						stroke-width="0" 
+						transform="translate(-50 -20)"/>
+					<text 
+						x="0" y="0" fill="#fff" 
+						text-anchor="middle" 
+						dominant-baseline="middle"
+						style="font-size: 16px;"
+						>第一级分支</text>
+				</g>
+				<!--右下-->
+				<g id="level2" transform="translate(200 100)" data-offx="200" data-offy="100">
+					<path 
+					d="M-200 -100 Q-200 0 -50 0" 
+					stroke-width="1" 
+					stroke="#73a1bf" 
+					fill="none"></path>
+					<g id="level3" transform="translate(150 -50)" data-offx="150" data-offy="-50">
+						<path 
+						d="M-100 50 Q-100 0 -40 0" 
+						stroke-width="1" 
+						stroke="#73a1bf" 
+						fill="none"></path>
+						<rect 
+							x="0" y="0" rx="10" ry="10"
+							width="80" 	
+							height="30"
+							fill="rgb(238,243,246)" 
+							stroke="#56b2fd" 
+							stroke-width="1" 
+							transform="translate(-40 -15)"/>
+						<text 
+							x="0" y="0" fill="#56b2fd" 
+							text-anchor="middle" 
+							dominant-baseline="middle"
+							style="font-size: 14px;"
+							>第二级分支</text>
+					</g>
+					<!--三级右下-->
+					<g id="level3" transform="translate(150 50)" data-offx="150" data-offy="50">
+						<path 
+						d="M-100 -50 Q-100 0 -40 0" 
+						stroke-width="1" 
+						stroke="#73a1bf" 
+						fill="none"></path> 
+						<rect 
+							x="0" y="0" rx="10" ry="10"
+							width="80" 	
+							height="30"
+							fill="rgb(238,243,246)" 
+							stroke="#56b2fd" 
+							stroke-width="1" 
+							transform="translate(-40 -15)"/>
+						<text 
+							x="0" y="0" fill="#56b2fd" 
+							text-anchor="middle" 
+							dominant-baseline="middle"
+							style="font-size: 14px;"
+							>第二级分支</text>
+					</g>
+
+					<rect 
+						x="0" y="0" rx="10" ry="10"
+						width="100" 
+						height="40"
+						fill="#7cc4ff" 
+						stroke="rgb(57,80,96)" 
+						stroke-width="0" 
+						transform="translate(-50 -20)"/>
+					<text 
+						x="0" y="0" fill="#fff" 
+						text-anchor="middle" 
+						dominant-baseline="middle"
+						style="font-size: 16px;"
+						>第一级分支</text>
+				</g>
+				<rect 
+					x="0" y="0" rx="10" ry="10"
+					width="120" 
+					height="50"
+					fill="#56b2fd" 
+					stroke="rgb(57,80,96)" 
+					stroke-width="0" 
+					transform="translate(-60 -25)"/>
+				<text 
+					x="0" y="0" fill="#fff" 
+					text-anchor="middle" 
+					dominant-baseline="middle"
+					style="font-size: 20px;"
+					>新建脑图</text>
+			</g>
+		</svg>
+	</div>
+<script>
+	window.onload = function() {
+		var g = document.querySelectorAll("g");
+		var _path = null;
+		var _this = null;
+		for(var i=0;i<g.length;i++){
+			g[i].onmousedown = function(ev){
+				_this = this;
+				_path = this.children[0];
+				var posX = ev.offsetX;
+				var posY = ev.offsetY;
+				var dx = 0;
+				var dy = 0;
+				
+				document.onmousemove = function(ev){
+					dx = ev.offsetX*1 - posX*1 + _this.getAttribute("data-offx")*1;
+					dy = ev.offsetY*1 - posY*1 + _this.getAttribute("data-offy")*1;
+					_this.setAttribute("transform","translate(" + dx  + " " + dy + ")");
+					if(_this.id == "level3"){
+						_path.setAttribute("d", "M" + parseInt(dx*(-1)+50)  + " " + dy*(-1) + "Q" + parseInt(dx*(-1)+50) + " 0 -40 0");
+					}else{
+						_path.setAttribute("d", "M" + dx*(-1) + " " + dy*(-1) + "Q" + dx*(-1) + " 0 50 0");	
+					}
+				};
+				
+				document.onmouseup = function() {
+					_this.setAttribute("data-offx",dx);
+					_this.setAttribute("data-offy",dy);
+					document.onmousemove = document.onmouseup = null;
+				};
+				ev.cancelBubble = true;
+			}
+		}
+
+	};
+</script>
+	</body>
+</html>
